@@ -1,0 +1,12 @@
+﻿@model ProjektSezon2.Models.Order
+@{
+    ViewData["Title"] = "Pay with Stripe";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Total për pagesë: <strong>@Model.Items.Sum(i => (i.Quantity ?? 0) * (i.UnitPrice ?? 0)).ToString("F2") €</strong></p>
+
+<form method="post" asp-action="Checkout">
+    <button type="submit" class="btn btn-primary">Pay with Stripe</button>
+</form>

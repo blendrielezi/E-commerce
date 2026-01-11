@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Edito Kategori";
+}
+
+<h2>Edito Kategori</h2>
+
+<form id="editForm">
+    <input type="hidden" id="categoryId" />
+
+    <div class="form-group">
+        <label>Emri</label>
+        <input type="text" id="name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Përshkrimi</label>
+        <textarea id="description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Image Path</label>
+        <input type="text" id="imagePath" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Ruaj Ndryshimet</button>
+    <a href="/Home/Index" class="btn btn-secondary">Anulo</a>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const categoryId = getCategoryIdFromUrl();
+
+            // Ngarko te dhenat ekzistuese të kategorise
+            $.get(`/api/Category/${categoryId}`, function (data) {
+                $('#categoryId').val(data.id);
+                $('#name').val(data.name);
+                $('#description').val(data.description);
+                $('#imagePath').val(data.imagePath);
+            });
+
+            // Dërgimi i formes për perditesim
+            $('#editForm').submit(function (e) {
+                e.preventDefault();
+
+                const category = {
+                    id: $('#categoryId').val(),
+                    name: $('#name').val(),
+                    description: $('#description').val(),
+                    imagePath: $('#imagePath').val()
+                };
+
+                $.ajax({
+                    url: `/api/Category/${category.id}`,
+                    method: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(category),
+                    success: function () {
+                        alert("Kategoria u përditësua me sukses!");
+                        window.location.href = "/Admin/Index"; 
+                    },
+                    error: function () {
+                        alert("Ndodhi një gabim gjatë përditësimit.");
+                    }
+                });
+            });
+
+            function getCategoryIdFromUrl() {
+                const parts = window.location.pathname.split('/');
+                return parts[parts.length - 1];
+            }
+        });
+    </script>
+}

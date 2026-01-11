@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ProjektSezon2.Models.Session>
+
+<h2>Your Sessions</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Started At (UTC)</th>
+            <th>Ended At (UTC)</th>
+            <th>IP Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.StartedAt.ToString("g")</td>
+                <td>@(s.EndedAt?.ToString("g") ?? "—")</td>
+                <td>@s.IpAddress</td>
+            </tr>
+        }
+    </tbody>
+</table>

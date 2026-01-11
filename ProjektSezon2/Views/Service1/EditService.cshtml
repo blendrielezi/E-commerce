@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Edito Shërbim";
+}
+
+<h2>Edito Shërbim</h2>
+
+<form id="editServiceForm" enctype="multipart/form-data">
+    <input type="hidden" id="serviceId" />
+    <input type="hidden" id="categoryId" /> <!-- Kjo është e re -->
+
+    <div class="form-group">
+        <label>Emri</label>
+        <input type="text" id="name" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label>Përshkrimi</label>
+        <textarea id="description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Çmimi (€)</label>
+        <input type="number" id="price" class="form-control" step="0.01" required />
+    </div>
+
+    <div class="form-group">
+        <label>Imazhi ekzistues</label><br />
+        <img id="existingImage" src="" alt="Imazhi aktual" style="max-width: 150px; height: auto;" />
+    </div>
+
+    <div class="form-group">
+        <label>Ngarko imazh të ri</label>
+        <input type="file" id="image" name="image" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">Ruaj Ndryshimet</button>
+    <a href="/Home/Index" class="btn btn-secondary">Anulo</a>
+</form>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const serviceId = window.location.pathname.split('/').pop();
+
+            // Merr të dhënat ekzistuese të shërbimit
+            $.get(`/api/Service/${serviceId}`, function (data) {
+                $('#serviceId').val(data.id);
+                $('#name').val(data.name);
+                $('#description').val(data.description);
+                $('#price').val(data.price);
+                $('#categoryId').val(data.categoryId); // e shtuar
+
+                if (data.imagePath) {
+                    $('#existingImage').attr('src', data.imagePath).show();
+                } else {
+                    $('#existingImage').hide();
+                }
+            }).fail(function () {
+                alert("Nuk u gjet shërbimi ose ndodhi një gabim.");
+                window.location.href = "/Home/Index";
+            });
+
+            // Kur dorëzohet forma
+            $('#editServiceForm').submit(function (e) {
+                e.preventDefault();
+                const formData = new FormData();
+                formData.append("id", $('#serviceId').val());
+                formData.append("name", $('#name').val());
+                formData.append("description", $('#description').val());
+                formData.append("price", $('#price').val());
+
+                const imageFile = $('#image')[0].files[0];
+                if (imageFile) {
+                    formData.append("image", imageFile);
+                }
+
+                $.ajax({
+                    url: `/api/Service/${$('#serviceId').val()}`,
+                    method: "PUT",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function () {
+                        alert("Shërbimi u përditësua me sukses.");
+                        window.location.href = `/Service1/Service/${$('#categoryId').val()}`;
+                    },
+                    error: function () {
+                        alert("Gabim gjatë përditësimit të shërbimit.");
+                    }
+                });
+            });
+        });
+    </script>
+}

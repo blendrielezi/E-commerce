@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Shërbimet për Kategorinë";
+}
+
+<h2>Shërbimet për Kategorinë</h2>
+<a href="/Service1/Create?categoryId=@Model.CategoryId" class="btn btn-primary mb-3">Krijo shërbim të ri</a>
+
+
+<table class="table table-bordered" id="serviceTable">
+    <thead>
+        <tr>
+            <th>Emri</th>
+            <th>Përshkrimi</th>
+            <th>Çmimi (€)</th>
+            <th>Veprime</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Mbushet me JavaScript -->
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var categoryId = @Model.CategoryId;
+
+            $.ajax({
+                url: `/api/Service/ByCategory/${categoryId}`,
+                method: "GET",
+                success: function (services) {
+                    if (services.length > 0) {
+                        let rows = '';
+                        services.forEach(service => {
+                            rows += `
+                                <tr>
+                                    <td>${service.name}</td>
+                                    <td>${service.description ?? ''}</td>
+                                    <td>${service.price} €</td>
+                                    <td>
+                                        <a href="/Service1/EditService/${service.id}" class="btn btn-warning btn-sm">Edit</a>
+                                        <button class="btn btn-danger btn-sm delete-service" data-id="${service.id}">Delete</button>
+                                    </td>
+                                </tr>`;
+                        });
+                        $("#serviceTable tbody").html(rows);
+                    } else {
+                        $("#serviceTable tbody").html("<tr><td colspan='4'>Nuk ka shërbime për këtë kategori.</td></tr>");
+                    }
+                },
+                error: function () {
+                    alert("Nuk ka sherbime per kete kategori");
+                }
+            });
+
+            $(document).on('click', '.delete-service', function () {
+                const serviceId = $(this).data("id");
+                if (confirm("A jeni i sigurt që doni të fshini këtë shërbim?")) {
+                    $.ajax({
+                        url: `/api/Service/${serviceId}`,
+                        method: "DELETE",
+                        success: function () {
+                            alert("Shërbimi u fshi me sukses!");
+                            location.reload();
+                        },
+                        error: function () {
+                            alert("Gabim gjatë fshirjes.");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

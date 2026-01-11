@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ProjektSezon2.Models.Order>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order Id</th>
+            <th>Data e Porosisë</th>
+            <th>Statusi i Pagesës</th>
+            <th>Totali</th>
+            <th>Detaje</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.CreatedAt.ToString("dd/MM/yyyy")</td>
+                <td>@order.PaymentStatus</td>
+                <td>@(order.TotalAmount.HasValue ? order.TotalAmount.Value.ToString("C") : "-")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@order.Id">Shiko</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

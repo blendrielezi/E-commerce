@@ -1,0 +1,35 @@
+﻿@model ProjektSezon2.Controllers.ClientServiceDetailsViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <img src="@Model.ImagePath" class="card-img-top" alt="@Model.Name" />
+                <div class="card-body">
+                    <h2 class="card-title">@Model.Name</h2>
+                    <p class="card-text">@Model.Description</p>
+                    <p class="fs-4 fw-bold">Price: @Model.Price €</p>
+                    <div class="d-flex justify-content-between">
+                        <a asp-controller="Clients" asp-action="Index" class="btn btn-secondary">
+                            Back
+                        </a>
+
+                        <form asp-controller="Cart"
+                              asp-action="Add"
+                              method="post"
+                              class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="returnUrl" value="@Url.Action("Details", "Clients", new { id = Model.Id })" />
+                            <button type="submit" class="btn btn-primary">
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿@model ProjektSezon2.Controllers.CartIndexViewModel
+
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="container py-5">
+    <h2>Your Cart</h2>
+
+    @if (!Model.Items.Any())
+    {
+        <p>Your cart is empty.</p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Service</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.UnitPrice €</td>
+                        <td>
+                            <form asp-action="Update" method="post" class="d-inline">
+                                <input type="hidden" name="orderItemId" value="@item.OrderItemId" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control d-inline w-auto" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Update</button>
+                            </form>
+                        </td>
+                        <td>@item.Subtotal €</td>
+                        <td>
+                            <form asp-action="Remove" method="post">
+                                <input type="hidden" name="orderItemId" value="@item.OrderItemId" />
+                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                    <td colspan="2"><strong>@Model.Total €</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-controller="Paymentstripe" asp-action="Checkout" class="btn btn-primary">Proceed to Stripe</a>
+            <a asp-controller="Payment" asp-action="Checkout" class="btn btn-primary">Proceed to Paypal</a>
+        }
+        else
+        {
+            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("MyCart", "Cart")" class="btn btn-primary">
+                Proceed to Stripe
+            </a>
+            <a asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("MyCart", "Cart")" class="btn btn-primary">
+                Proceed to Paypal
+            </a>
+        }
+    }
+</div>

@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    // default to false if missing
+    bool showFourth = ViewData["ShowFourthCard"] as bool? ?? false;
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <!-- Card 1 -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Shto Kategori/Produkte</h5>
+                <p class="card-text flex-grow-1">Pershkrim per shtimin e kategorive ose produkteve.</p>
+                <a asp-controller="Admin" asp-action="Index" class="btn btn-primary mt-auto">Submit</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Menaxho Users</h5>
+                <p class="card-text flex-grow-1">Pershkrim per menaxhimin e perdoruesve.</p>
+                <a asp-controller="CrudUser" asp-action="Index" class="btn btn-primary mt-auto">Submit</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Rraporte dhe satistika</h5>
+                <p class="card-text flex-grow-1">Pershkrim per raporte dhe satistika.</p>
+                <a asp-controller="Report" asp-action="Index" class="btn btn-primary mt-auto">Submit</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Porosite e Paguara</h5>
+                <p class="card-text flex-grow-1">Pershkrim per Porosite e Paguara.</p>
+                <a asp-controller="AdminOrders" asp-action="Paid" class="btn btn-primary mt-auto">Submit</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Porosite e Derguara</h5>
+                <p class="card-text flex-grow-1">Pershkrim per Porosite e Derguara.</p>
+                <a asp-controller="AdminOrders" asp-action="Shipped" class="btn btn-primary mt-auto">Submit</a>
+            </div>
+        </div>
+    </div>
+
+    @* Only the “special” admin sees this *@
+    @if (showFourth)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-warning">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-warning">Menaxho administratoret</h5>
+                    <p class="card-text flex-grow-1">Pershkrim per menaxhimin e administratoreve.</p>
+                    <a asp-controller="MainAdmin" asp-action="Index" class="btn btn-warning mt-auto">Submit</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

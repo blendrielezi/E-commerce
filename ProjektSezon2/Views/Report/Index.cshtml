@@ -1,0 +1,136 @@
+﻿@{
+    ViewData["Title"] = "Rraporte dhe Statistika";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.css" />
+<div class="container py-5">
+    <h2>@ViewData["Title"]</h2>
+    <div class="row gy-4">
+        <!-- Sales -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Sales (Last 6 Months)</div>
+                <div class="card-body"><canvas id="salesChart"></canvas></div>
+            </div>
+        </div>
+        <!-- Top Services -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Top 5 Services Sold</div>
+                <div class="card-body"><canvas id="topServicesChart"></canvas></div>
+            </div>
+        </div>
+        <!-- Sessions -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Daily Sessions (7 Days)</div>
+                <div class="card-body"><canvas id="sessionsChart"></canvas></div>
+            </div>
+        </div>
+        <!-- Cookie Consents -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Cookie Consents</div>
+                <div class="card-body"><canvas id="cookieChart"></canvas></div>
+            </div>
+        </div>
+        <!-- Services per Category -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Services per Category</div>
+                <div class="card-body"><canvas id="servicesCatChart"></canvas></div>
+            </div>
+        </div>
+        <!-- Totals -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Totals</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">Users: @ViewBag.TotalUsers</li>
+                        <li class="list-group-item">Orders: @ViewBag.TotalOrders</li>
+                        <li class="list-group-item">Services: @ViewBag.TotalServices</li>
+                        <li class="list-group-item">Categories: @ViewBag.TotalCategories</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Orders per Month -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Orders (Last 6 Months)</div>
+                <div class="card-body"><canvas id="ordersChart"></canvas></div>
+            </div>
+        </div>
+        <!-- Avg Order Value -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header">Avg Order Value</div>
+                <div class="card-body"><canvas id="avgChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Sales chart
+            new Chart(document.getElementById('salesChart'), {
+                type: 'line',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(ViewBag.SalesLabels)),
+                    datasets: [{ label: 'Total Sales', data: @Html.Raw(Json.Serialize(ViewBag.SalesData)), fill: true, tension: 0.3 }]
+                }
+            });
+            // Top services
+            new Chart(document.getElementById('topServicesChart'), {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(ViewBag.TopServicesLabels)),
+                    datasets: [{ label: 'Quantity Sold', data: @Html.Raw(Json.Serialize(ViewBag.TopServicesData)) }]
+                }
+            });
+            // Sessions
+            new Chart(document.getElementById('sessionsChart'), {
+                type: 'line',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(ViewBag.SessionLabels)),
+                    datasets: [{ label: 'Sessions', data: @Html.Raw(Json.Serialize(ViewBag.SessionData)), fill: false, tension: 0.3 }]
+                }
+            });
+            // Cookie consents
+            new Chart(document.getElementById('cookieChart'), {
+                type: 'pie',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(ViewBag.CookieLabels)),
+                    datasets: [{ data: @Html.Raw(Json.Serialize(ViewBag.CookieData)) }]
+                }
+            });
+            // Services per category
+            new Chart(document.getElementById('servicesCatChart'), {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(ViewBag.ServicesCatLabels)),
+                    datasets: [{ label: 'Services Count', data: @Html.Raw(Json.Serialize(ViewBag.ServicesCatData)) }]
+                }
+            });
+            // Orders per month
+            new Chart(document.getElementById('ordersChart'), {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(ViewBag.OrderLabels)),
+                    datasets: [{ label: 'Order Count', data: @Html.Raw(Json.Serialize(ViewBag.OrderData)) }]
+                }
+            });
+            // Avg order value
+            new Chart(document.getElementById('avgChart'), {
+                type: 'line',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(ViewBag.AvgLabels)),
+                    datasets: [{ label: 'Avg Value', data: @Html.Raw(Json.Serialize(ViewBag.AvgData)), fill: false, tension: 0.3 }]
+                }
+            });
+        });
+    </script>
+}

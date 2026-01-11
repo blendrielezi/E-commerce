@@ -1,0 +1,27 @@
+﻿@model ProjektSezon2.Models.Order
+@{
+    ViewData["Title"] = "Pay with PayPal";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>Please click the button below to pay the total of <strong>@ViewBag.Amount €</strong> via PayPal.</p>
+
+<form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post">
+    <!-- PayPal required fields -->
+    <input type="hidden" name="cmd" value="_xclick" />
+    <input type="hidden" name="business" value="@ViewBag.BusinessEmail" />
+    <input type="hidden" name="item_name" value="Order #@ViewBag.Invoice" />
+    <input type="hidden" name="amount" value="@ViewBag.Amount" />
+    <input type="hidden" name="currency_code" value="@ViewBag.Currency" />
+    <input type="hidden" name="invoice" value="@ViewBag.Invoice" />
+
+    <!-- URLs -->
+    <input type="hidden" name="return" value="@ViewBag.ReturnUrl?invoice=@ViewBag.Invoice" />
+    <input type="hidden" name="cancel_return" value="@ViewBag.CancelUrl" />
+
+    <button type="submit" class="btn btn-primary">
+        <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png"
+             alt="Pay with PayPal" style="height:36px;" />
+    </button>
+</form>

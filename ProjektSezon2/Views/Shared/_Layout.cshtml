@@ -1,0 +1,73 @@
+﻿<!-- ProjektSezon2/Views/Shared/_Layout.cshtml -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ProjektSezon2</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ProjektSezon2.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <!-- Brand -->
+                <a class="navbar-brand" asp-controller="Clients" asp-action="Index">Amazon</a>
+                <!-- Toggler for mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar" aria-controls="mainNavbar"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Collapsible content -->
+                <div class="collapse navbar-collapse" id="mainNavbar">
+                    <ul class="navbar-nav w-100">
+                        <!-- Home link -->
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Clients" asp-action="Index">Home</a>
+                        </li>
+                        <!-- Admin dashboard (only for Admins) -->
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="MainAdmin">
+                                    Dashboard
+                                </a>
+                            </li>
+                        }
+                        <!-- Spacer pushes the following items to the right -->
+                        <li class="nav-item ms-auto">
+                            @await Component.InvokeAsync("CartSummary")
+                        </li>
+                        <!-- Login/Logout partial -->
+                        <li class="nav-item">
+                            <partial name="_LoginPartial" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- 9) Render the cookie-consent banner -->
+    @await Html.PartialAsync("_CookieConsentPartial")
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <!-- 10) Include the cookie‐consent script -->
+    <script src="~/js/cookieConsent.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

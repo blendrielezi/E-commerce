@@ -1,0 +1,81 @@
+﻿@model ProjektSezon2.Controllers.ClientServiceListViewModel
+@{
+    ViewData["Title"] = "Our Services";
+    var selectedId = ViewData["SelectedCategoryId"] as int?;
+}
+
+<!-- Include custom CSS for this page -->
+<link rel="stylesheet" href="~/css/service-listing.css" />
+
+<div class="container py-5 service-container">
+    <h2 class="text-center mb-4">Discover Our Services</h2>
+    <p class="text-center text-muted mb-5">Find the perfect services tailored to your needs</p>
+
+    <div class="row">
+        <aside class="col-md-3 mb-4">
+            <div class="categories-sidebar">
+                <h5>Categories</h5>
+                <ul class="list-group category-list">
+                    <li class="list-group-item d-flex align-items-center @(selectedId == null ? "active" : "")">
+                        <i class="fas fa-th-large me-2"></i>
+                        <a asp-controller="Clients" asp-action="Index" class="flex-grow-1 @(selectedId == null ? "text-white" : "")">All Services</a>
+                    </li>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        var isActive = selectedId == cat.Id;
+                        <li class="list-group-item d-flex align-items-center @(isActive ? "active" : "")">
+                            <img src="@cat.ImagePath" alt="@cat.Name" class="me-2" />
+                            <a asp-controller="Clients" asp-action="Index" asp-route-categoryId="@cat.Id" class="flex-grow-1 @(isActive ? "text-white" : "")">@cat.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </aside>
+
+        <section class="col-md-9 services-section">
+            <form asp-controller="Clients" asp-action="Index" method="get" class="input-group mb-4 service-search">
+                <input type="text" name="searchTerm" class="form-control" placeholder="Search services…" value="@(ViewData["SearchTerm"] as string)" />
+                <button class="btn" type="submit">Search</button>
+            </form>
+
+            <div class="row g-4">
+                @if (!Model.Services.Any())
+                {
+                    <div class="col-12">
+                        <div class="no-results">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <p>No services found matching your criteria.</p>
+                            <a asp-controller="Clients" asp-action="Index" class="btn btn-outline-primary mt-2">View All Services</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var svc in Model.Services)
+                    {
+                        <div class="col-sm-6 col-lg-4">
+                            <div class="card service-card">
+                                <img src="@svc.ImagePath" class="card-img-top" alt="@svc.Name" />
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">@svc.Name</h5>
+                                    <p class="card-text">@svc.Description</p>
+                                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                                        <span class="price">@svc.Price €</span>
+                                        <a asp-controller="Clients" asp-action="Details" asp-route-id="@svc.Id" class="btn btn-details">Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <!-- Include custom JS for this page -->
+    <script src="~/js/service-listing.js"></script>
+}

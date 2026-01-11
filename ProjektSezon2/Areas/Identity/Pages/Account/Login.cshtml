@@ -1,0 +1,446 @@
+﻿@page
+@model LoginModel
+<style>
+    body {
+        background: #f8f9fa;
+        background-image: radial-gradient(circle at 25% 25%, #e3f2fd 0%, transparent 50%), radial-gradient(circle at 75% 75%, #f3e5f5 0%, transparent 50%);
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        color: #2c3e50;
+        margin: 0;
+        padding: 80px 0 20px 0;
+        min-height: calc(100vh - 100px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        line-height: 1.6;
+    }
+
+    /* Container Principal */
+    .container {
+        max-width: 500px;
+        width: 100%;
+        padding: 2rem;
+    }
+
+    /* Titull */
+    h1 {
+        text-align: center;
+        color: #2c3e50;
+        font-family: 'Crimson Text', serif;
+        font-size: 3rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        letter-spacing: -0.02em;
+        margin-top: 0;
+    }
+
+    h2 {
+        color: #34495e;
+        font-family: 'Crimson Text', serif;
+        font-weight: 600;
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        letter-spacing: -0.01em;
+    }
+
+    /* Card Styling - Centered */
+    .login-section {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1), 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e9ecef;
+        transition: box-shadow 0.3s ease;
+        position: relative;
+    }
+
+        .login-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            border-radius: 12px 12px 0 0;
+        }
+
+    /* Form Elements */
+    form {
+        width: 100%;
+    }
+
+    .form-floating {
+        position: relative;
+        margin-bottom: 1.75rem;
+    }
+
+        .form-floating > input.form-control {
+            width: 100%;
+            height: 52px;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #fff;
+            transition: all 0.2s ease;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+            .form-floating > input.form-control:focus {
+                border-color: #3498db;
+                box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            }
+
+        .form-floating > label {
+            position: absolute;
+            top: 50%;
+            left: 1.25rem;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-weight: 500;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            background: #fff;
+            padding: 0 0.5rem;
+            font-size: 1rem;
+        }
+
+        .form-floating > input.form-control:focus + label,
+        .form-floating > input.form-control:not(:placeholder-shown) + label {
+            top: 0;
+            font-size: 0.875rem;
+            color: #3498db;
+        }
+
+    /* Validation Messages */
+    .text-danger {
+        color: #e74c3c;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+        font-weight: 500;
+    }
+
+    /* Checkbox */
+    .checkbox {
+        margin: 2rem 0;
+    }
+
+        .checkbox label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            cursor: pointer;
+            color: #495057;
+            font-size: 0.95rem;
+        }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-right: 0.75rem;
+        border: 2px solid #ced4da;
+        border-radius: 3px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .form-check-input:checked {
+            background-color: #3498db;
+            border-color: #3498db;
+        }
+
+    /* Main Login Button */
+    button[type="submit"],
+    #login-submit {
+        width: 100%;
+        height: 48px;
+        background: #3498db;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-transform: none;
+        letter-spacing: 0.01em;
+        margin-bottom: 1.5rem;
+        font-family: 'Inter', sans-serif;
+    }
+
+        button[type="submit"]:hover,
+        #login-submit:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+    /* Divider */
+    .divider {
+        position: relative;
+        text-align: center;
+        margin: 2rem 0;
+        color: #6c757d;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #dee2e6;
+            z-index: 1;
+        }
+
+        .divider span {
+            background: #fff;
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+    /* External Providers Container */
+    .external-providers {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+
+    /* Circular External Provider Buttons */
+    .external-provider-btn {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 2px solid;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .external-provider-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* Google Button */
+        .external-provider-btn.google {
+            background: #fff;
+            border-color: #dadce0;
+            color: #3c4043;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+            .external-provider-btn.google:hover {
+                background: #f8f9fa;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+
+            .external-provider-btn.google::before {
+                content: "G";
+                background: linear-gradient(45deg, #4285f4, #ea4335, #fbbc05, #34a853);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+        /* GitHub Button */
+        .external-provider-btn.github {
+            background: #24292e;
+            border-color: #24292e;
+            color: #fff;
+        }
+
+            .external-provider-btn.github:hover {
+                background: #1b1f23;
+                box-shadow: 0 4px 12px rgba(36, 41, 46, 0.3);
+            }
+
+            .external-provider-btn.github::before {
+                content: "⚡";
+            }
+
+        /* Microsoft Button */
+        .external-provider-btn.microsoft {
+            background: #0078d4;
+            border-color: #0078d4;
+            color: #fff;
+        }
+
+            .external-provider-btn.microsoft:hover {
+                background: #106ebe;
+                box-shadow: 0 4px 12px rgba(0, 120, 212, 0.3);
+            }
+
+            .external-provider-btn.microsoft::before {
+                content: "⊞";
+            }
+
+        /* Facebook Button */
+        .external-provider-btn.facebook {
+            background: #1877f2;
+            border-color: #1877f2;
+            color: #fff;
+        }
+
+            .external-provider-btn.facebook:hover {
+                background: #166fe5;
+                box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+            }
+
+            .external-provider-btn.facebook::before {
+                content: "f";
+            }
+
+        /* Generic Provider Button */
+        .external-provider-btn.generic {
+            background: #6c757d;
+            border-color: #6c757d;
+            color: #fff;
+        }
+
+            .external-provider-btn.generic:hover {
+                background: #5a6268;
+                box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+            }
+
+            .external-provider-btn.generic::before {
+                content: "🔑";
+            }
+
+    /* Links */
+    a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        font-size: 0.95rem;
+    }
+
+        a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+    /* Link Container */
+    .links-container {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+        .links-container p {
+            margin: 0.5rem 0;
+        }
+
+    /* Hidden form for external providers */
+    #external-account {
+        display: none;
+    }
+</style>
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    <div class="login-section">
+        <form id="account" method="post">
+            <h2>Welcome Back</h2>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-floating">
+                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder=" " />
+                <label asp-for="Input.Email" class="form-label">Email</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder=" " />
+                <label asp-for="Input.Password" class="form-label">Password</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="checkbox">
+                <label asp-for="Input.RememberMe" class="form-label">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                </label>
+            </div>
+
+            <button id="login-submit" type="submit">Log in</button>
+        </form>
+
+        @{
+            if ((Model.ExternalLogins?.Count ?? 0) > 0)
+            {
+                <div class="divider">
+                    <span>or continue with</span>
+                </div>
+
+                <div class="external-providers">
+                    @foreach (var provider in Model.ExternalLogins!)
+                    {
+                        var providerClass = provider.Name.ToLower() switch
+                        {
+                            "google" => "google",
+                            "github" => "github",
+                            "microsoft" => "microsoft",
+                            "facebook" => "facebook",
+                            _ => "generic"
+                        };
+
+                        <button type="button" class="external-provider-btn @providerClass"
+                                onclick="submitExternalLogin('@provider.Name')"
+                                title="Log in with @provider.DisplayName">
+                        </button>
+                    }
+                </div>
+            }
+        }
+
+        <div class="links-container">
+            <p>
+                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+            </p>
+            <p>
+                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+            </p>
+            <p>
+                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Hidden form for external login -->
+    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+        <input type="hidden" name="provider" id="external-provider" value="" />
+    </form>
+</div>
+
+<script>
+    function submitExternalLogin(provider) {
+        document.getElementById('external-provider').value = provider;
+        document.getElementById('external-account').submit();
+    }
+</script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

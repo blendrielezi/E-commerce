@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Krijo Kategori";
+}
+
+<h2>Shto Kategori</h2>
+
+<div class="mb-3">
+    <label for="categoryName" class="form-label">Emri i Kategorisë</label>
+    <input type="text" class="form-control" id="categoryName" placeholder="Shkruaj emrin">
+</div>
+
+<div class="mb-3">
+    <label for="categoryDescription" class="form-label">Përshkrimi</label>
+    <input type="text" class="form-control" id="categoryDescription" placeholder="Shkruaj përshkrimin">
+</div>
+
+<div class="mb-3">
+    <label for="categoryImage" class="form-label">Zgjidh Imazhin</label>
+    <input type="file" class="form-control" id="categoryImage">
+</div>
+
+<button type="button" class="btn btn-success" id="createCategoryBtn">Krijo Kategorinë</button>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $("#createCategoryBtn").click(function () {
+            var formData = new FormData();
+            formData.append("name", $("#categoryName").val());
+            formData.append("description", $("#categoryDescription").val());
+            formData.append("image", $("#categoryImage")[0].files[0]);
+
+            $.ajax({
+                url: "/api/Category",  
+                method: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // Pas suksesit drejton perdoruesin tek Home/Index
+                    window.location.href = '/Admin/Index';  // Ky esht rruga per te kaluar në faqen kryesore
+                },
+                error: function (xhr) {
+                    alert("Gabim: " + xhr.responseText);
+                }
+            });
+        });
+    </script>
+}
+

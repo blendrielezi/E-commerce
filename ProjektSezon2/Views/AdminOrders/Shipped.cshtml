@@ -1,0 +1,32 @@
+﻿@model List<ProjektSezon2.Models.Order>
+@{
+    ViewData["Title"] = "Shipped Orders";
+}
+<h2>@ViewData["Title"]</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Shipped On</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.Id</td>
+                <td>@o.ApplicationUser?.Email</td>
+                <td>@o.CreatedAt.ToString("g")</td>
+                <td>@o.TotalAmount €</td>
+                <td>
+                    <a asp-action="ShippedDetails" asp-route-id="@o.Id" class="btn btn-sm btn-info">
+                        Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

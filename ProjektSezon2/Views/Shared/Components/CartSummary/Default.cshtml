@@ -1,0 +1,18 @@
+﻿@using ProjektSezon2.ViewComponents
+@model CartSummaryViewModel
+
+@{
+    var cartUrl = Url.Action("MyCart", "Cart");
+    var href = cartUrl;
+}
+
+<a href="@href" class="nav-link position-relative" role="button" aria-label="Cart">
+    <img src="~/images/shopping-basket-icon-12.jpg" alt="Cart" width="24" height="24" />
+    @if (Model.ItemCount > 0)
+    {
+        <span class="position-absolute top-30 start-100 translate-middle badge rounded-pill bg-danger">
+            @Model.ItemCount
+            <span class="visually-hidden">items in cart</span>
+        </span>
+    }
+</a>

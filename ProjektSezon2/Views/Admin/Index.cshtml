@@ -1,0 +1,89 @@
+﻿@{
+    ViewData["Title"] = "Lista e Kategorive";
+}
+
+<h2>Lista e Kategorive</h2>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Krijo Kategori të Re</a>
+
+<table class="table table-bordered" id="categoryTable">
+    <thead>
+        <tr>
+            <th>Imazhi</th>
+            <th>Emri</th>
+            <th>Përshkrimi</th>
+            <th>Data e Krijimit</th>
+            <th>Veprime</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Mbushet me js -->
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadCategories();
+
+            // Kur klikohet nje kategori, behet redirect
+            $(document).on('click', '.category-link', function (e) {
+                e.preventDefault();
+                const categoryId = $(this).data("id");
+
+                // Redirect te view që ngarkon sherbimet
+                window.location.href = `/Service1/Service/${categoryId}`;
+            });
+
+            // Event per butonin Delete
+            $(document).on('click', '.delete-btn', function () {
+                const categoryId = $(this).data("id");
+                if (confirm("Jeni i sigurt që doni ta fshini këtë kategori?")) {
+                    $.ajax({
+                        url: `/api/Category/${categoryId}`,
+                        type: 'DELETE',
+                        success: function () {
+                            alert("Kategoria u fshi me sukses!");
+                            loadCategories(); // rifresko listen
+                        },
+                        error: function () {
+                            alert("Gabim gjatë fshirjes së kategorisë.");
+                        }
+                    });
+                }
+            });
+        });
+
+        function loadCategories() {
+            $.ajax({
+                url: "/api/Category",
+                method: "GET",
+                success: function (data) {
+                    let rows = '';
+                    data.forEach(function (category) {
+                        rows += `
+                            <tr>
+                                <td><img src="${category.imagePath}" width="50" height="50" /></td>
+                                <td>
+                                    <a href="#" class="category-link" data-id="${category.id}">
+                                        ${category.name}
+                                    </a>
+                                </td>
+                                <td>${category.description ?? ''}</td>
+                                <td>${new Date(category.createdAt).toLocaleDateString()}</td>
+                                <td>
+                                    <a href="/Admin/Edit/${category.id}" class="btn btn-warning btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm delete-btn" data-id="${category.id}">Delete</button>
+                                </td>
+                            </tr>`;
+                    });
+                    $("#categoryTable tbody").html(rows);
+                },
+                error: function () {
+                    alert("Gabim gjatë ngarkimit të kategorive.");
+                }
+            });
+        }
+    </script>
+}

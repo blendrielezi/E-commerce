@@ -1,0 +1,22 @@
+﻿@model ProjektSezon2.Models.ApplicationUser
+@{
+    ViewData["Title"] = "Fshi Perdoruesin";
+}
+
+<h2>Fshi Përdoruesin</h2>
+
+<h4>A jeni i sigurt që doni të fshini këtë përdorues?</h4>
+
+<div>
+    <p><strong>Emri:</strong> @Model.UserName</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button type="submit" class="btn btn-danger">Po, Fshi</button>
+    <a asp-action="Index" class="btn btn-secondary">Jo, Anulo</a>
+</form>
+
+
+

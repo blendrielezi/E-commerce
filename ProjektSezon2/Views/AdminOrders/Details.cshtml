@@ -1,0 +1,39 @@
+﻿@model ProjektSezon2.Models.Order
+@{
+    ViewData["Title"] = $"Order #{Model.Id} Details";
+}
+<h2>@ViewData["Title"]</h2>
+
+<div class="mb-3">
+    <strong>Customer:</strong> @Model.ApplicationUser?.Email<br />
+    <strong>Placed:</strong> @Model.CreatedAt.ToString("g")<br />
+    <strong>Status:</strong> @Model.PaymentStatus
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>Unit Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.Service?.Name</td>
+                <td>@item.UnitPrice €</td>
+                <td>@item.Quantity</td>
+                <td>@(item.UnitPrice * item.Quantity) €</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+            <td><strong>@Model.TotalAmount €</strong></td>
+        </tr>
+    </tbody>
+</table>
+
+<a asp-action="Paid" class="btn btn-secondary">kthehu te porosite e paguara</a>
